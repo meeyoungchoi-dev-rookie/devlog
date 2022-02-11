@@ -1,0 +1,27 @@
+spring:
+  mvc:
+      static-path-pattern: /static/**
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    check-template-location: true
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+  datasource:
+    url: jdbc:oracle:thin:@127.0.0.1:1521:XE
+    username:
+    password:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+mybatis:
+  mapper-locations: mybatis-mapper/**/*.xml
+
+  # model 프로퍼티 camel case 설정
+  configuration:
+    map-underscore-to-camel-case: true
+
+  # 패키지 명을 생략할 수 있도록 alias 설정
+  type-aliases-package: com.example.devlog.entity
+
+# mapper 로그레벨 설정
+logging.level.com.example.jhfinal.repository: TRACE
