@@ -15,3 +15,5 @@
   + 게시글이 100개일때 100개의 채팅방을 만들것인가?
   + 게시글 여러개 채팅방 하나
 + [블로그 프로젝트 테이블 설계 구조](https://unique-wandflower-4cc.notion.site/52b599fe286a4a3c85d3bad7764a4b71)
++ [블로그 프로젝트 테이블 생성 작업](https://unique-wandflower-4cc.notion.site/9e229794f2154a81b08313fb31e232b4)
+
