@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class BlogController {
 
-    @GetMapping("/devlog")
+    @GetMapping("/")
     public String intro() {
-        return "about";
+        return "index";
     }
 }
