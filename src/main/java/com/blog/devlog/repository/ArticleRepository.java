@@ -22,7 +22,7 @@ public class ArticleRepository {
         Date insertDate = new Date();
         Long timeInMilliSeconds = insertDate.getTime();
         java.sql.Date date = new java.sql.Date(timeInMilliSeconds);
-        String sql = "insert into boards(board_no, title, content , user_id, board_created_at, board_updated_at) VALUES(? ,? ,? ,? ,? ,?)";
+        String sql = "insert into boards(board_no, title, content , user_id, board_created_at, board_updated_at) VALUES(board_seq.NEXTVAL ,? ,? ,? ,? ,?)";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -31,12 +31,11 @@ public class ArticleRepository {
         try {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, article.getBoardNo());
-            pstmt.setString(2, article.getTitle());
-            pstmt.setString(3, article.getContent());
-            pstmt.setString(4, article.getUserId());
+            pstmt.setString(1, article.getTitle());
+            pstmt.setString(2, article.getContent());
+            pstmt.setString(3, article.getUserId());
+            pstmt.setDate(4, date);
             pstmt.setDate(5, date);
-            pstmt.setDate(6, date);
             int count = pstmt.executeUpdate();
             log.info("insert ={} ", count);
             return article;
