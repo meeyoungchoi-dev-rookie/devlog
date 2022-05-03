@@ -17,7 +17,7 @@ class ArticleRepositoryTest {
     void crudTest() throws SQLException {
 
         // insert
-        Article article = new Article(700, "test700", "content700", "userB");
+        Article article = new Article(701, "test701", "content701", "userB");
         articleRepository.save(article);
 
         // read
@@ -25,7 +25,8 @@ class ArticleRepositoryTest {
         assertThat(article.getBoardNo()).isEqualTo(findedArticle.getBoardNo());
 
         // update
-        Article updated = findedArticle.update(article.getBoardNo() , "update_test700", "update_content_700", findedArticle.getUserId());
+        Article updateArticle = new Article(701, "update_test701", "update_content_701", findedArticle.getUserId());
+        Article updated = findedArticle.update(updateArticle);
         articleRepository.update(updated);
         assertThat(article.getBoardNo()).isEqualTo(updated.getBoardNo());
 

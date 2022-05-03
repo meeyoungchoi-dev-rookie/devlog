@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.NoSuchElementException;
 
@@ -22,20 +21,20 @@ public class ArticleRepository {
         Date insertDate = new Date();
         Long timeInMilliSeconds = insertDate.getTime();
         java.sql.Date date = new java.sql.Date(timeInMilliSeconds);
-        String sql = "insert into boards(board_no, title, content , user_id, board_created_at, board_updated_at) VALUES(board_seq.NEXTVAL ,? ,? ,? ,? ,?)";
+        String sql = "insert into boards(board_no, title, content , user_id, board_created_at, board_updated_at) VALUES(? ,? ,? ,? ,? ,?)";
 
         Connection con = null;
         PreparedStatement pstmt = null;
 
-
         try {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, article.getTitle());
-            pstmt.setString(2, article.getContent());
-            pstmt.setString(3, article.getUserId());
-            pstmt.setDate(4, date);
+            pstmt.setInt(1, article.getBoardNo());
+            pstmt.setString(2, article.getTitle());
+            pstmt.setString(3, article.getContent());
+            pstmt.setString(4, article.getUserId());
             pstmt.setDate(5, date);
+            pstmt.setDate(6, date);
             int count = pstmt.executeUpdate();
             log.info("insert ={} ", count);
             return article;
@@ -84,7 +83,7 @@ public class ArticleRepository {
         }
     }
 
-    void update(Article article) throws SQLException {
+    public void update(Article article) throws SQLException {
 
         String sql = "update boards set title = ? , content = ?  where board_no = ?";
 
@@ -112,7 +111,7 @@ public class ArticleRepository {
 
     }
 
-    void delete(int boardsNo) throws SQLException {
+    public void delete(int boardsNo) throws SQLException {
         String sql = "delete from boards where board_no = ?";
 
         Connection con = null;
