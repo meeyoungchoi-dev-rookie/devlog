@@ -4,6 +4,7 @@ import com.blog.devlog.domain.Article;
 import com.blog.devlog.repository.ArticleRepository;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,9 +17,11 @@ import static org.assertj.core.api.Assertions.*;
 
 class ArticleServiceTest {
 
-    ArticleService articleService;
+    public static final Integer BOARD_NO = 2;
 
-    ArticleRepository articleRepository;
+    private ArticleService articleService;
+
+    private ArticleRepository articleRepository;
 
     @BeforeEach
     void beforeEach() {
@@ -31,12 +34,16 @@ class ArticleServiceTest {
         articleService = new ArticleService(articleRepository);
     }
 
+    @AfterEach
+    void after() throws SQLException {
+        articleRepository.delete(BOARD_NO);
+    }
 
 
     @Test
     @DisplayName("게시글 등록 서비스 테스트")
     void createTest() throws SQLException {
-        Article article = new Article(401, "title401", "content401", "userA");
+        Article article = new Article(BOARD_NO, "title", "content", "userA");
 
         Article entity = articleService.insert(article);
 
@@ -50,7 +57,7 @@ class ArticleServiceTest {
     @Test
     @DisplayName("게시글 조회 서비스 테스트")
     void findOneTest() throws SQLException {
-        Article article = new Article(402, "title402", "content402", "userA");
+        Article article = new Article(BOARD_NO, "title", "content", "userA");
 
         Article entity = articleService.insert(article);
 
@@ -64,11 +71,11 @@ class ArticleServiceTest {
     @Test
     @DisplayName("게시글 수정 서비스 테스트")
     void update() throws SQLException {
-        Article article = new Article(406, "title406", "content406", "userB");
+        Article article = new Article(BOARD_NO, "title", "content", "userB");
 
         Article entity = articleService.insert(article);
 
-        entity.update(new Article(406, "406_title_수정", "406_content_수정", "userB"));
+        entity.update(new Article(BOARD_NO, "title_수정", "content_수정", "userB"));
         articleService.update(entity);
 
         Article updated = articleService.findById(entity.getBoardNo());
@@ -79,7 +86,7 @@ class ArticleServiceTest {
     @Test
     @DisplayName("게시글 삭제 서비스 테스트")
     void deleteTest() throws SQLException {
-        Article article = new Article(405, "title405", "content405", "userB");
+        Article article = new Article(BOARD_NO, "title", "content", "userB");
         Article entity = articleService.insert(article);
 
         articleService.delete(entity.getBoardNo());

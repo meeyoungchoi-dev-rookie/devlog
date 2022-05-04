@@ -2,6 +2,7 @@ package com.blog.devlog.repository;
 
 import com.blog.devlog.domain.Article;
 import com.zaxxer.hikari.HikariDataSource;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,9 @@ import static org.assertj.core.api.Assertions.*;
 
 class ArticleRepositoryTest {
 
-    ArticleRepository articleRepository;
+    public static final Integer BOARD_NO = 1;
+
+    private ArticleRepository articleRepository;
 
 
     @BeforeEach
@@ -27,11 +30,16 @@ class ArticleRepositoryTest {
         articleRepository = new ArticleRepository(dataSource);
     }
 
+    @AfterEach
+    void after() throws SQLException {
+        articleRepository.delete(BOARD_NO);
+    }
+
     @Test
     void crudTest() throws SQLException {
 
         // insert
-        Article article = new Article(702, "test702", "content702", "userB");
+        Article article = new Article(BOARD_NO, "test", "content701", "userB");
         articleRepository.save(article);
 
         // read
@@ -39,7 +47,7 @@ class ArticleRepositoryTest {
         assertThat(article.getBoardNo()).isEqualTo(findedArticle.getBoardNo());
 
         // update
-        Article updateArticle = new Article(702, "update_test702", "update_content_702", findedArticle.getUserId());
+        Article updateArticle = new Article(BOARD_NO, "update_test701", "update_content_701", findedArticle.getUserId());
         Article updated = findedArticle.update(updateArticle);
         articleRepository.update(updated);
         assertThat(article.getBoardNo()).isEqualTo(updated.getBoardNo());

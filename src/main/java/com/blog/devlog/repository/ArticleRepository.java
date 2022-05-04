@@ -3,6 +3,7 @@ package com.blog.devlog.repository;
 
 import com.blog.devlog.connection.DBConnectionUtil;
 import com.blog.devlog.domain.Article;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.stereotype.Repository;
@@ -15,16 +16,12 @@ import java.util.NoSuchElementException;
 
 @Slf4j
 @Repository
+@RequiredArgsConstructor
 public class ArticleRepository {
+
     private final DataSource dataSource;
 
-    public ArticleRepository(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
     public Article save(Article article) throws SQLException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd KK:mm:ss");
-
         Date insertDate = new Date();
         Long timeInMilliSeconds = insertDate.getTime();
         java.sql.Date date = new java.sql.Date(timeInMilliSeconds);
@@ -94,7 +91,6 @@ public class ArticleRepository {
 
         String sql = "update boards set title = ? , content = ?  where board_no = ?";
 
-
         Connection con = null;
         PreparedStatement pstmt = null;
 
@@ -138,25 +134,15 @@ public class ArticleRepository {
         }
     }
 
-
-
-
-
     private void close(Connection con, Statement stmt, ResultSet rs) {
         JdbcUtils.closeResultSet(rs);
         JdbcUtils.closeConnection(con);
         JdbcUtils.closeStatement(stmt);
     }
 
-
-
-
-
-
     private Connection getConnection() throws SQLException {
         Connection connection = dataSource.getConnection();
-        return DBConnectionUtil.getConnection();
+        return connection;
     }
-
 
 }
