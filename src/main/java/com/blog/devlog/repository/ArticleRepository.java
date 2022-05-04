@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -25,7 +27,7 @@ public class ArticleRepository {
         Date insertDate = new Date();
         Long timeInMilliSeconds = insertDate.getTime();
         java.sql.Date date = new java.sql.Date(timeInMilliSeconds);
-        String sql = "insert into boards(board_no, title, content , user_id, board_created_at, board_updated_at) VALUES(? ,? ,? ,? ,? ,?)";
+        String sql = "insert into boards(board_no, title, content , user_id, board_created_at, board_updated_at) VALUES(board_seq.NEXTVAL ,? ,? ,? ,? ,?)";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -33,12 +35,11 @@ public class ArticleRepository {
         try {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, article.getBoardNo());
-            pstmt.setString(2, article.getTitle());
-            pstmt.setString(3, article.getContent());
-            pstmt.setString(4, article.getUserId());
+            pstmt.setString(1, article.getTitle());
+            pstmt.setString(2, article.getContent());
+            pstmt.setString(3, article.getUserId());
+            pstmt.setDate(4, date);
             pstmt.setDate(5, date);
-            pstmt.setDate(6, date);
             int count = pstmt.executeUpdate();
             log.info("insert ={} ", count);
             return article;
@@ -86,6 +87,49 @@ public class ArticleRepository {
             close(con, pstmt, null);
         }
     }
+
+    public List<Article> findAll() throws SQLException {
+
+        String sql = "select * from boards";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Article article = null;
+        List<Article> articles = new ArrayList<>();
+
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int article_id = rs.getInt("board_no");
+                String title = rs.getString("title");
+                String content = rs.getString("content");
+                String userId = rs.getString("user_id");
+
+                article = new Article(article_id, title, content, userId);
+                articles.add(article);
+            }
+            if (rs.equals(null)){
+                throw new NoSuchElementException("there are no articles");
+            }
+
+            return articles;
+        } catch (SQLException e) {
+            log.error("db error", e);
+            e.printStackTrace();
+            throw e;
+        } finally {
+            close(con, pstmt, null);
+        }
+    }
+
+
+
+
+
 
     public void update(Article article) throws SQLException {
 
@@ -144,5 +188,6 @@ public class ArticleRepository {
         Connection connection = dataSource.getConnection();
         return connection;
     }
+
 
 }

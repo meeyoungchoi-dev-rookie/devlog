@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +33,9 @@ public class ArticleService {
     // 삭제
     public void delete(int boardNo) throws SQLException {
         repository.delete(boardNo);
+    }
+
+    public List<Article> findAll() throws SQLException {
+        return repository.findAll();
     }
 }

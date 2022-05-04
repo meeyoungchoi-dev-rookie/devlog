@@ -1,10 +1,12 @@
 package com.blog.devlog.domain;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Objects;
 
 @Getter
+@ToString
 public class Article {
     private Integer boardNo;
     private String title;
