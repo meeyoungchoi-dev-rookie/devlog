@@ -10,10 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -45,16 +42,15 @@ public class BlogController {
 
     // 글 조회
     @GetMapping("/{articleNo}")
-    public Article getArticle(@PathVariable Integer articleNo) {
-        Article responeEntity = null;
-        log.info("get : {} ", articleNo);
+    public ResponseEntity<Article> getArticle(@PathVariable Integer articleNo) {
+        Article articleResponse = null;
         try {
-            responeEntity =  articleService.findById(articleNo);
+            articleResponse = articleService.findById(articleNo);
         } catch (SQLException e) {
             e.printStackTrace();
+            return new ResponseEntity<Article>((Article) null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return responeEntity;
+        return new ResponseEntity<Article>(articleResponse, HttpStatus.OK);
     }
 
     // 글 수정
@@ -63,9 +59,11 @@ public class BlogController {
         Article updateEntity = new Article(articleRequest.getBoardNo(), articleRequest.getTitle(), articleRequest.getContent(), articleRequest.getUserId());
 
         try {
+            articleService.findById(articleRequest.getBoardNo());
             articleService.update(updateEntity);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<String>("update 진행중 에러 발생", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<String>("update OK", HttpStatus.OK);
@@ -75,9 +73,11 @@ public class BlogController {
     @DeleteMapping("/{articleNo}")
     public ResponseEntity<String> deleteArticle(@PathVariable Integer articleNo) {
         try {
+            articleService.findById(articleNo);
             articleService.delete(articleNo);
         } catch (SQLException e) {
             e.printStackTrace();
+            return new ResponseEntity<String>("삭제 진행중 예외 발생", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<String>("delete OK", HttpStatus.OK);
