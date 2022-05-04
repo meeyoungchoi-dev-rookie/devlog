@@ -1,23 +1,37 @@
 package com.blog.devlog.repository;
 
 import com.blog.devlog.domain.Article;
+import com.zaxxer.hikari.HikariDataSource;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
 
+import static com.blog.devlog.connection.ConnectionConst.*;
 import static org.assertj.core.api.Assertions.*;
 
 
 class ArticleRepositoryTest {
 
-    ArticleRepository articleRepository = new ArticleRepository();
+    ArticleRepository articleRepository;
+
+
+    @BeforeEach
+    void beforeEach() {
+        HikariDataSource dataSource  = new HikariDataSource();
+        dataSource.setJdbcUrl(URL);
+        dataSource.setUsername(USERNAME);
+        dataSource.setPassword(PASSWORD);
+
+        articleRepository = new ArticleRepository(dataSource);
+    }
 
     @Test
     void crudTest() throws SQLException {
 
         // insert
-        Article article = new Article(701, "test701", "content701", "userB");
+        Article article = new Article(702, "test702", "content702", "userB");
         articleRepository.save(article);
 
         // read
@@ -25,7 +39,7 @@ class ArticleRepositoryTest {
         assertThat(article.getBoardNo()).isEqualTo(findedArticle.getBoardNo());
 
         // update
-        Article updateArticle = new Article(701, "update_test701", "update_content_701", findedArticle.getUserId());
+        Article updateArticle = new Article(702, "update_test702", "update_content_702", findedArticle.getUserId());
         Article updated = findedArticle.update(updateArticle);
         articleRepository.update(updated);
         assertThat(article.getBoardNo()).isEqualTo(updated.getBoardNo());

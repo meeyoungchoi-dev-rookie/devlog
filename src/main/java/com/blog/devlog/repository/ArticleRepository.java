@@ -4,8 +4,10 @@ package com.blog.devlog.repository;
 import com.blog.devlog.connection.DBConnectionUtil;
 import com.blog.devlog.domain.Article;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,6 +16,11 @@ import java.util.NoSuchElementException;
 @Slf4j
 @Repository
 public class ArticleRepository {
+    private final DataSource dataSource;
+
+    public ArticleRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public Article save(Article article) throws SQLException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd KK:mm:ss");
@@ -136,30 +143,9 @@ public class ArticleRepository {
 
 
     private void close(Connection con, Statement stmt, ResultSet rs) {
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                log.info("error", e);
-            }
-        }
-
-
-        if (stmt != null) {
-            try {
-                stmt.close();
-            } catch (SQLException e) {
-                log.info("error", e);
-            }
-        }
-
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                log.info("error", e);
-            }
-        }
+        JdbcUtils.closeResultSet(rs);
+        JdbcUtils.closeConnection(con);
+        JdbcUtils.closeStatement(stmt);
     }
 
 
@@ -167,7 +153,8 @@ public class ArticleRepository {
 
 
 
-    private Connection getConnection() {
+    private Connection getConnection() throws SQLException {
+        Connection connection = dataSource.getConnection();
         return DBConnectionUtil.getConnection();
     }
 
