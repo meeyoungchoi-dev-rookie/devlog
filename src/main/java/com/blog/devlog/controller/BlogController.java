@@ -26,9 +26,7 @@ public class BlogController {
         return "index";
     }
 
-
-    // 글 등록
-    @PostMapping("/insert")
+    @PostMapping("/article/insert")
     public String insertArticle(@RequestBody ArticleRequest articleRequest) {
         log.info("insert : {}", articleRequest.toString());
         Article articleEntity = new Article(0, articleRequest.getTitle(), articleRequest.getContent(), articleRequest.getUserName());
@@ -40,8 +38,7 @@ public class BlogController {
         return "OK";
     }
 
-    // 글 조회
-    @GetMapping("/{articleNo}")
+    @GetMapping("/article/{articleNo}")
     public ResponseEntity<Article> getArticle(@PathVariable Integer articleNo) {
         Article articleResponse = null;
         try {
@@ -53,8 +50,7 @@ public class BlogController {
         return new ResponseEntity<Article>(articleResponse, HttpStatus.OK);
     }
 
-    // 글 수정
-    @PutMapping("/{articleNo}")
+    @PutMapping("/article/{articleNo}")
     public ResponseEntity<String> updateArticle(@RequestBody Article articleRequest) {
         Article updateEntity = new Article(articleRequest.getBoardNo(), articleRequest.getTitle(), articleRequest.getContent(), articleRequest.getUserId());
 
@@ -69,8 +65,7 @@ public class BlogController {
         return new ResponseEntity<String>("update OK", HttpStatus.OK);
     }
 
-    // 글 삭제
-    @DeleteMapping("/{articleNo}")
+    @DeleteMapping("/article/{articleNo}")
     public ResponseEntity<String> deleteArticle(@PathVariable Integer articleNo) {
         try {
             articleService.findById(articleNo);
@@ -83,7 +78,7 @@ public class BlogController {
         return new ResponseEntity<String>("delete OK", HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/article/all")
     public ResponseEntity<List<Article>> getArticleList() {
         List<Article> articles = null;
         try {
