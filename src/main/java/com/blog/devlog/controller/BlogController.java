@@ -51,8 +51,8 @@ public class BlogController {
     }
 
     @PutMapping("/article/{articleNo}")
-    public ResponseEntity<String> updateArticle(@RequestBody Article articleRequest) {
-        Article updateEntity = new Article(articleRequest.getBoardNo(), articleRequest.getTitle(), articleRequest.getContent(), articleRequest.getUserId());
+    public ResponseEntity<String> updateArticle(@RequestBody ArticleRequest articleRequest) {
+        Article updateEntity = new Article(articleRequest.getBoardNo(), articleRequest.getTitle(), articleRequest.getContent(), articleRequest.getUserName());
 
         try {
             articleService.findById(articleRequest.getBoardNo());
