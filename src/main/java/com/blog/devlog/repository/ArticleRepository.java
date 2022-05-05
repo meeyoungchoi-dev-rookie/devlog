@@ -5,6 +5,7 @@ import com.blog.devlog.connection.DBConnectionUtil;
 import com.blog.devlog.domain.Article;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.stereotype.Repository;
 
@@ -126,11 +127,6 @@ public class ArticleRepository {
         }
     }
 
-
-
-
-
-
     public void update(Article article) throws SQLException {
 
         String sql = "update boards set title = ? , content = ?  where board_no = ?";
@@ -180,12 +176,14 @@ public class ArticleRepository {
 
     private void close(Connection con, Statement stmt, ResultSet rs) {
         JdbcUtils.closeResultSet(rs);
-        JdbcUtils.closeConnection(con);
         JdbcUtils.closeStatement(stmt);
+        // 트랜잭션 동기화를 사용하려면 DataSourceUtils를 사용해야 한다
+        DataSourceUtils.releaseConnection(con, dataSource);
     }
 
     private Connection getConnection() throws SQLException {
-        Connection connection = dataSource.getConnection();
+        // 트랜잭션 동기화 매니저에서 커넥션을 가져다 사용하겠다
+        Connection connection = DataSourceUtils.getConnection(dataSource);
         return connection;
     }
 
