@@ -28,6 +28,7 @@ public class Article {
         return this;
     }
 
+    // 내용을 비교
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -36,6 +37,7 @@ public class Article {
         return Objects.equals(boardNo, article.boardNo) && Objects.equals(title, article.title) && Objects.equals(content, article.content) && Objects.equals(userId, article.userId);
     }
 
+    // 객체의 주소를 비교한다
     @Override
     public int hashCode() {
         return Objects.hash(boardNo, title, content, userId);
