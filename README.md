@@ -20,6 +20,8 @@
 + 게시글 서비스 CRUD 테스크 코드 작성
 + 게시글 수정시 엔티티에 update 메서드를 만들어 조회해온 객체의 데이터를 변경하는 방식으로 메서드 설계
 + 계층형 댓글 테이블 설계
++ 댓글 리파지터리 CRUD 설계
++ 댓글 리파지터리 CRUD 테스트 코드 작성
 
 ### 계층형 댓글 테이블 설계 
 1. 필요한 데이터
@@ -90,3 +92,22 @@ java.lang.AssertionError: Expecting code to raise a throwable.
 - 그런데 DB 서벅에서 커밋을 해주지 않아 커넥션이 커넥션 풀에 반환되지 않아 애플리켕션 서버가 DB 서버에 명령을 줄 수 없었다
 - 해결과정
 + DB 서버에서 작업한 내용을 커밋한 후 애플리케이션 서버를 재시작 시켰다
+
+### SQL 관련 발생했던 예외
+####오라클 sql ORA-00904 : 부적합한 식별자 invalid identifier
++ insert와 select 쿼리를 날릴때 발생했다
++ comments 테이블에 존재하지 않는 컬럼을 insert 및 조회하려고 해서 발생했다
+#### 인덱스에서누락된IN또는OUT매개변수:
++ update 쿼리를 날릴때 발생했다
++ 쿼리파라미터의 개수가 부족해서 ? 개수와 맞지 않았다
+#### java.sql.SQLException: 부적합한 열 이름
++ 테이블에 존재하지 않는 컬럼명을 입력했기 때문에 발생했더
++ 테이블의 컬럼명과 jdbc sql문의 컬럼명을 맞춰줬다
+#### Error code - ORA-00001 : 유일성 제약조건에 위배됩니다 (unique constraint violated)
++ 테이블에 데이터 insert시 PK 컬럼은 고유한 값을 가져야 하는데 PK 컬럼이 중복되서 에러가 발생했다
+#### 오라클 sql ORA-00933 : SQL COMMAND NOT PROPERLY ENDED
++ sql 구문이 올바르게 종료되지 않아서 발생했다
++ ; (세미콜론을 뺴먹었다)
+
+### SQL 테이블에 컬럼추가하는 방법
++ alter table 테이블명 add (컬럼명 타입 null 여부);
