@@ -31,7 +31,7 @@ public class CommentRepository {
         String sql = "insert into comments(comment_no," +
                 "comment_board_no," +
                 "comment_content, " +
-                "user_id," +
+                "COMMENT_USER_ID," +
                 "comment_created_at," +
                 "comment_updated_at," +
                 "comment_parent_no," +
@@ -51,8 +51,9 @@ public class CommentRepository {
             pstmt.setString(4, comment.getUserId());
             pstmt.setDate(5, date);
             pstmt.setDate(6, date);
-            pstmt.setInt(7, comment.getCommentIdx());
-            pstmt.setInt(8, comment.getCommentGroupNo());
+            pstmt.setInt(7, comment.getCommentParentNo());
+            pstmt.setInt(8, comment.getCommentIdx());
+            pstmt.setInt(9, comment.getCommentGroupNo());
             int count = pstmt.executeUpdate();
             log.info("insert ={} ", count);
             return comment;
@@ -88,10 +89,11 @@ public class CommentRepository {
                 String userId = rs.getString("user_id");
                 Date commentCreatedAt = rs.getDate("comment_created_at");
                 Date commentUpdatedAt = rs.getDate("comment_updated_at");
+                int commentParentNo = rs.getInt("COMMENT_PARENT_NO");
                 int commentIdx = rs.getInt("comment_idx");
                 int commentGroupNo = rs.getInt("comment_group_no");
 
-                commentEntity = new Comment(commentNo, commentBoardNo, commentConent, userId, commentCreatedAt, commentUpdatedAt, commentIdx, commentGroupNo);
+                commentEntity = new Comment(commentNo, commentBoardNo, commentConent, userId, commentCreatedAt, commentUpdatedAt, commentParentNo  , commentIdx, commentGroupNo);
                 comments.add(commentEntity);
             }
             if (rs.equals(null)){
@@ -108,9 +110,9 @@ public class CommentRepository {
         }
     }
 
-    // 수정을 위한 댓글 조회
-    public Comment findOne(Integer commentNo) throws SQLException {
-        String sql = "select * from comments where comment_no = ?";
+    // 게시글에 댓글이 하나만 달린경우 댓글 조회
+    public Comment findOne(Integer boardNo) throws SQLException {
+        String sql = "select * from comments where COMMENT_BOARD_NO  = ?";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -121,18 +123,20 @@ public class CommentRepository {
         try {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, boardNo);
             rs = pstmt.executeQuery();
             if (rs.next()) {
-                int commentNoPk = rs.getInt("board_no");
+                int commentNoPk = rs.getInt("COMMENT_NO");
                 int commentBoardNo = rs.getInt("comment_board_no");
                 String commentConent = rs.getString("comment_content");
-                String userId = rs.getString("user_id");
+                String userId = rs.getString("COMMENT_USER_ID");
                 Date commentCreatedAt = rs.getDate("comment_created_at");
                 Date commentUpdatedAt = rs.getDate("comment_updated_at");
+                int commentParentNo = rs.getInt("COMMENT_PARENT_NO");
                 int commentIdx = rs.getInt("comment_idx");
                 int commentGroupNo = rs.getInt("comment_group_no");
 
-                commentEntity = new Comment(commentNoPk, commentBoardNo, commentConent, userId, commentCreatedAt, commentUpdatedAt, commentIdx, commentGroupNo);
+                commentEntity = new Comment(commentNoPk, commentBoardNo, commentConent, userId, commentCreatedAt, commentUpdatedAt, commentParentNo ,commentIdx, commentGroupNo);
             } else {
                 throw new NoSuchElementException("there are no comment");
             }
@@ -153,16 +157,16 @@ public class CommentRepository {
         Date insertDate = new Date();
         Long timeInMilliSeconds = insertDate.getTime();
         java.sql.Date date = new java.sql.Date(timeInMilliSeconds);
-        String sql = "update comments set comment_no = ? ," +
-                "set comment_board_no = ? ," +
-                "set comment_content = ? , " +
-                "set user_id = ? ," +
-                "set comment_created_at = ?," +
-                "set comment_updated_at = ?," +
-                "set comment_parent_no = ?," +
-                "set comment_idx = ?," +
-                "set comment_group_no = ?" +
-                "where comment_no = ?";
+        String sql = "update comments set comment_no = ?," +
+                     "                     comment_board_no = ?," +
+                     "                     comment_content = ?," +
+                     "                     COMMENT_USER_ID = ?," +
+                     "                     comment_created_at = ?," +
+                     "                     comment_updated_at = ?," +
+                     "                    comment_parent_no = ?," +
+                     "                    comment_idx = ?," +
+                     "                    comment_group_no = ?" +
+                     "                where comment_no = ?";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -180,6 +184,7 @@ public class CommentRepository {
             pstmt.setInt(7, comment.getCommentIdx());
             pstmt.setInt(8, comment.getCommentGroupNo());
             pstmt.setInt(9, comment.getCommentNo());
+            pstmt.setInt(10, comment.getCommentBoardNo());
             int count = pstmt.executeUpdate();
             log.info("update ={} ", count);
             return comment.getCommentNo();
