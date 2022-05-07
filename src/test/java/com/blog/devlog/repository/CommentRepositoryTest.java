@@ -249,11 +249,11 @@ class CommentRepositoryTest {
         // then
         // 조회 결고 검증
         assertThat(comments.size()).isEqualTo(5);
-        assertThat(comments.get(0).getCommentBoardNo()).isEqualTo(10);
-        assertThat(comments.get(1).getCommentBoardNo()).isEqualTo(10);
-        assertThat(comments.get(2).getCommentBoardNo()).isEqualTo(10);
-        assertThat(comments.get(3).getCommentBoardNo()).isEqualTo(10);
-        assertThat(comments.get(4).getCommentBoardNo()).isEqualTo(10);
+        assertThat(comments.get(0).getCommentBoardNo()).isEqualTo(1);
+        assertThat(comments.get(1).getCommentBoardNo()).isEqualTo(1);
+        assertThat(comments.get(2).getCommentBoardNo()).isEqualTo(1);
+        assertThat(comments.get(3).getCommentBoardNo()).isEqualTo(1);
+        assertThat(comments.get(4).getCommentBoardNo()).isEqualTo(1);
     }
 
 

@@ -73,6 +73,9 @@ public class CommentRepository {
                 "where comment_board_no = ? " +
                 "order by COMMENT_NO ASC";
 
+
+
+
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
