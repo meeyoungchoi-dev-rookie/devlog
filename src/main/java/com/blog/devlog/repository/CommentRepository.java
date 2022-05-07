@@ -68,7 +68,7 @@ public class CommentRepository {
 
 
     // 댓글 전체 조회
-    public List<Comment> findAll() throws SQLException {
+    public List<Comment> findAll(Integer boardNo) throws SQLException {
         String sql = "select * from comments where comment_board_no = ?";
 
         Connection con = null;
@@ -81,12 +81,13 @@ public class CommentRepository {
         try {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, boardNo);
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                int commentNo = rs.getInt("board_no");
+                int commentNo = rs.getInt("comment_no");
                 int commentBoardNo = rs.getInt("comment_board_no");
                 String commentConent = rs.getString("comment_content");
-                String userId = rs.getString("user_id");
+                String userId = rs.getString("COMMENT_USER_ID");
                 Date commentCreatedAt = rs.getDate("comment_created_at");
                 Date commentUpdatedAt = rs.getDate("comment_updated_at");
                 int commentParentNo = rs.getInt("COMMENT_PARENT_NO");
@@ -209,6 +210,28 @@ public class CommentRepository {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
             pstmt.setInt(1,commentNo);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            log.error("db error", e);
+            throw e;
+        } finally {
+            close(con, pstmt, null);
+        }
+    }
+
+
+    // 게시글과 연고나된 댓글 전부 삭제
+    public void deleteCommentsRelatedWithArticle(int boardNo) throws SQLException {
+        String sql = "delete from comments where COMMENT_BOARD_NO = ?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1,boardNo);
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
