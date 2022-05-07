@@ -185,10 +185,10 @@ public class CommentRepository {
             pstmt.setInt(7, comment.getCommentIdx());
             pstmt.setInt(8, comment.getCommentGroupNo());
             pstmt.setInt(9, comment.getCommentNo());
-            pstmt.setInt(10, comment.getCommentBoardNo());
+            pstmt.setInt(10, comment.getCommentNo());
             int count = pstmt.executeUpdate();
             log.info("update ={} ", count);
-            return comment.getCommentNo();
+            return count;
         } catch (SQLException e) {
             log.error("db error", e);
             e.printStackTrace();
