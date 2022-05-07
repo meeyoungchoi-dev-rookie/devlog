@@ -69,7 +69,9 @@ public class CommentRepository {
 
     // 댓글 전체 조회
     public List<Comment> findAll(Integer boardNo) throws SQLException {
-        String sql = "select * from comments where comment_board_no = ?";
+        String sql = "select * from comments " +
+                "where comment_board_no = ? " +
+                "order by COMMENT_NO ASC";
 
         Connection con = null;
         PreparedStatement pstmt = null;
