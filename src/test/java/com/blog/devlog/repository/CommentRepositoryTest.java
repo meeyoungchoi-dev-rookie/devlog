@@ -24,7 +24,10 @@ class CommentRepositoryTest {
     public static final Integer COMMENT_NO5 = 5;
     public static final Integer COMMENT_NO6 = 6;
 
-    public static final Integer COMMENT_NO1 = 7;
+    public static final Integer COMMENT_NO7 = 7;
+    public static final Integer COMMENT_NO8 = 8;
+    public static final Integer COMMENT_NO9 = 9;
+    public static final Integer COMMENT_NO10 = 10;
 
 
     private ArticleRepository articleRepository;
@@ -192,15 +195,15 @@ class CommentRepositoryTest {
                                         COMMENT_NO,
                                         0,
                                          COMMENT_NO);
-        Comment comment2 = new Comment( COMMENT_NO1,
+        Comment comment2 = new Comment( COMMENT_NO7,
                                         article.getBoardNo(),
                                         "10번글_두번째_댓글",
                                         "userC",
                                         null,
                                         null,
-                                        COMMENT_NO1,
+                COMMENT_NO7,
                                         0,
-                                        COMMENT_NO1);
+                COMMENT_NO7);
 
 
         Comment comment3 = new Comment( COMMENT_NO2,
@@ -274,7 +277,7 @@ class CommentRepositoryTest {
         // 2. 댓글 한개 추가
         Comment commentOne = new Comment(  COMMENT_NO ,
                                             BOARD_NO ,
-                                            "1번글에 대한 첫번쨰 댓글",
+                                            "#1 1번 댓글",
                                             "userB",
                                             null,
                                             null,
@@ -285,125 +288,137 @@ class CommentRepositoryTest {
         Comment commentOneInsertResult = commentRepository.insert(commentOne);
         System.out.println("첫번째 댓글 등록 결과: " + commentOneInsertResult.toString());
 
-
-
-        // 3. 댓글에 대한 답글 한개 추가
         Comment commentTwo = new Comment(   COMMENT_NO2 ,
                                             BOARD_NO ,
-                                            "첫번째 댓글에 대한 답글1" ,
+                                            "#2 2번 댓글" ,
                                             "userC" ,
                                             null ,
                                             null ,
-                                            commentOne.getCommentNo() ,
-                                            commentOne.getCommentIdx() + 1 ,
-                                            commentOne.getCommentGroupNo());
+                                            COMMENT_NO2 ,
+                                            0 ,
+                                            COMMENT_NO2);
 
         Comment commentTwoInsertResult = commentRepository.insert(commentTwo);
-        System.out.println("첫번째 댓글에 대한 답글 등록 결과 : " + commentTwoInsertResult.toString());
+        System.out.println("두번쨰 댓글 등록 결과: " + commentTwoInsertResult.toString());
 
 
-        // 답글에 대한 새로운 답글 추가
-        Comment commentThird = new Comment( COMMENT_NO3 ,
+        Comment commentThree = new Comment( COMMENT_NO3 ,
                                             BOARD_NO ,
-                                            "첫번쨰 댓글에 달린 첫번쨰 답글에 대한 답글No.3",
+                                            "#3 3번 댓글" ,
                                             "userD" ,
                                             null ,
                                             null ,
-                                            commentTwo.getCommentNo() ,
-                                            commentTwoInsertResult.getCommentIdx() + 1 ,
-                                             commentTwoInsertResult.getCommentGroupNo());
+                                            COMMENT_NO3 ,
+                                            0 ,
+                                            COMMENT_NO3);
 
-        Comment commentThirdResult = commentRepository.insert(commentThird);
-        System.out.println("첫번째 댓글에 대한 답글에 대한 댓글 추가 결과: " + commentThirdResult.toString());
+        Comment commentThreeInsertResult = commentRepository.insert(commentThree);
+        System.out.println("세번쨰 댓글 등록 결과: " + commentThreeInsertResult.toString());
 
-
-        // 3번쨰 댓글에 대한 답글 추가
-        Comment commentFourth = new Comment(  COMMENT_NO4 ,
-                                              BOARD_NO ,
-                                              "첫번째 댓글에 대한 4번째 댓글 추가" ,
-                                              "userE" ,
-                                              null ,
-                                              null ,
-                                              commentThirdResult.getCommentParentNo() ,
-                                              commentThirdResult.getCommentIdx() + 1 ,
-                                               commentThirdResult.getCommentGroupNo());
-
-
-        Comment commentFourthInsertResult = commentRepository.insert(commentFourth);
-        System.out.println("첫번째 댓글에 대한 4번째 댓글 추가 결과: " + commentFourthInsertResult.toString());
+        // 2번째 댓글에 대한 답글
+        Comment replyCommentTwo = new Comment(  COMMENT_NO4 ,
+                                                BOARD_NO ,
+                                                "#2_1 2번댓글에 대한 답글" ,
+                                                "userE" ,
+                                                null ,
+                                                null ,
+                                                commentTwoInsertResult.getCommentParentNo() ,
+                                                commentTwoInsertResult.getCommentIdx() + 1 ,
+                                                commentTwoInsertResult.getCommentGroupNo());
+        Comment commentReplyTwoResult = commentRepository.insert(replyCommentTwo);
+        System.out.println("4번쨰 #2_1 2번댓글에 대한 답글: " + commentReplyTwoResult.toString());
 
 
+        // 1번째 댓글에 대한 답글
+        Comment replyCommentOne = new Comment(  COMMENT_NO5 ,
+                                                BOARD_NO ,
+                                                "#1_1 1번댓글에 대한 답글" ,
+                                                "userF" ,
+                                                null ,
+                                                null ,
+                                                commentOneInsertResult.getCommentParentNo() ,
+                                                commentOneInsertResult.getCommentIdx() + 1 ,
+                                                commentOneInsertResult.getCommentGroupNo());
+        Comment commentReplyOneResult = commentRepository.insert(replyCommentOne);
+        System.out.println("5번째 #1_1 1번 댓글에 대한 답글 : " + commentReplyOneResult.toString());
 
-        // 첫번째 게시글에 대한 다섯번째 댓글 추가
-        Comment commentFivth = new Comment( COMMENT_NO5 ,
+        // #2_1번 댓글에 대한 답글
+        Comment replyCommentTwo_1 = new Comment(   COMMENT_NO6 ,
+                                                   BOARD_NO ,
+                                                   "#2_2 : #2_1번 댓글에 대한 답글" ,
+                                                   "userG" ,
+                                                   null ,
+                                                   null ,
+                                                   commentReplyTwoResult.getCommentParentNo() ,
+                                                   commentReplyTwoResult.getCommentIdx() + 1,
+                                                   commentReplyTwoResult.getCommentGroupNo());
+        Comment commentReplyTwo_1Result = commentRepository.insert(replyCommentTwo_1);
+        System.out.println("6번쨰 #2_2 : #2_1번 댓글에 대한 답글: " + commentReplyTwo_1Result.toString());
+
+
+        // #7번 댓글
+        Comment commentSeventh = new Comment( COMMENT_NO7 ,
+                                             BOARD_NO ,
+                                             "#7 : 7번째 댓글" ,
+                                             "userH" ,
+                                             null ,
+                                             null ,
+                                             COMMENT_NO7 ,
+                                             0 ,
+                                              COMMENT_NO7 );
+
+        Comment commentSeventhResult = commentRepository.insert(commentSeventh);
+        System.out.println("7번째 #7 댓글: " + commentSeventhResult.toString());
+
+        // #8번 댓글
+        Comment commentEight = new Comment( COMMENT_NO8 ,
                                             BOARD_NO ,
-                                            "첫번쨰 게시글에 대한 다섯번쨰 댓글 NO.5",
-                                            "userF",
+                                            "#8 : 8번째 댓글" ,
+                                            "userI" ,
                                             null ,
                                             null ,
-                                            COMMENT_NO5 ,
-                                            commentOne.getCommentIdx() ,
-                                            COMMENT_NO5);
-
-        Comment commentFivthInsertResult = commentRepository.insert(commentFivth);
-        System.out.println("첫번째 게시글에 대한 5번쨰 댓글 : " + commentFivthInsertResult.toString());
-
-        // 다섯번쨰 댓글에 대한 답글 추가
-        Comment commentEight = new Comment( 8 ,
-                BOARD_NO ,
-                "다섯번째 댓글에 대한 답글 추가 : NO.8",
-                "userF",
-                null ,
-                null ,
-                COMMENT_NO5 ,
-                commentFivthInsertResult.getCommentIdx() + 1 ,
-                COMMENT_NO5);
-
+                                            COMMENT_NO8 ,
+                                            0 ,
+                                            COMMENT_NO8);
         Comment commentEightInsertResult = commentRepository.insert(commentEight);
-        System.out.println("다섯번째 댓글에 대한 답글 추가 : NO.8" + commentEight.toString());
+        System.out.println("#8번째 댓글 : " + commentEightInsertResult.toString());
 
-        // 첫번째 댓글에 대한 두번째 댓글 추가
-        Comment commentSixth = new Comment( COMMENT_NO6 ,
+
+        // #9번 댓글 => #2-2(6번 댓글)에 대한 답글
+        Comment commentNine = new Comment(  COMMENT_NO9 ,
                                             BOARD_NO ,
-                                            "첫번째 댓글에 대한 두번째 답글 NO.6" ,
-                                            "userG",
+                                            "#9 : #2-3 (#2-2 6번 댓글에 대한 답글)" ,
+                                            "userJ" ,
                                             null ,
                                             null ,
-                                            commentOneInsertResult.getCommentParentNo() ,
-                                            commentOneInsertResult.getCommentIdx() + 1 ,
-                                            commentOneInsertResult.getCommentGroupNo());
+                                            replyCommentTwo_1.getCommentParentNo(),
+                                            replyCommentTwo_1.getCommentIdx() + 1,
+                                            replyCommentTwo_1.getCommentGroupNo());
 
 
-
-        Comment commentSixthInsertResult = commentRepository.insert(commentSixth);
-        System.out.println("첫번째 댓글에 대한 두번째 답글 (NO.6) : " + commentSixth.toString());
-
+        Comment commentNineInsertResult = commentRepository.insert(commentNine);
+        System.out.println("#9번째 댓글 : #2-3 (#2-2 6번글에 대한 답글) : " + commentNineInsertResult.toString());
 
 
-        Comment commentSeventh = new Comment( 7 ,
-                BOARD_NO ,
-                "첫번째 댓글에 대한 세번째 답글 (NO.7)" ,
-                "userH",
-                null ,
-                null ,
-                commentOneInsertResult.getCommentParentNo() ,
-                commentOneInsertResult.getCommentIdx() + 1 ,
-                commentOneInsertResult.getCommentGroupNo());
+        // #10번 댓글 => #7 (7번 댓글)에 대한 답글
+        Comment replyCommentSeventh = new Comment(  COMMENT_NO10 ,
+                                                    BOARD_NO ,
+                                                    "#10 : #7-1 (#7 7번 댓글에 대한 답글)" ,
+                                                    "userK" ,
+                                                    null ,
+                                                    null ,
+                                                    commentSeventhResult.getCommentParentNo() ,
+                                                    commentSeventhResult.getCommentIdx() + 1 ,
+                                                    commentSeventhResult.getCommentGroupNo());
+        Comment replyCommentSeventhResult = commentRepository.insert(replyCommentSeventh);
+        System.out.println("#10번째 댓글 : #7-1 (#7 7번 댓글에 대한 답글) : " + replyCommentSeventhResult.toString());
 
-        Comment commentSeventhInsertResult = commentRepository.insert(commentSeventh);
-        System.out.println("첫번째 댓글에 대한 세번째 답글 (NO.7)" + commentSeventhInsertResult.toString());
+        // 계층 조회
+        List<Comment> comments = commentRepository.findAll(BOARD_NO);
 
-        // when
-        // 4. 게시글 번호에 달린 댓글을 가져올떄 대댓글까지 조회해 오는지 테스트
-        List<Comment> resultComments = commentRepository.findAll(article.getBoardNo());
-
-        // 대댓글 까지 조회해온것 출력하여 확인
-        for (Comment commentStr : resultComments) {
-            System.out.println(commentStr.getCommentNo() + " : " + commentStr.toString());
+        for (Comment commentStr : comments) {
+            System.out.println(commentStr.toString());
         }
 
-        // then
-        // 5. 계층형 구조로 잘 조회되었는지 결과확인
-        assertThat(resultComments.size()).isEqualTo(8);
     }
 }

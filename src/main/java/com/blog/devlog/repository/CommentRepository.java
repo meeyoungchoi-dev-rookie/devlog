@@ -71,7 +71,7 @@ public class CommentRepository {
     public List<Comment> findAll(Integer boardNo) throws SQLException {
         String sql = "select * from comments " +
                 "where comment_board_no = ? " +
-                "order by COMMENT_GROUP_NO ASC , COMMENT_IDX ASC ";
+                "order by COMMENT_GROUP_NO ASC , COMMENT_IDX ASC , COMMENT_NO DESC";
 
 
 
