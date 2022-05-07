@@ -320,7 +320,7 @@ class CommentRepositoryTest {
         // 3번쨰 댓글에 대한 답글 추가
         Comment commentFourth = new Comment(  COMMENT_NO4 ,
                                               BOARD_NO ,
-                                              "첫번째 댓글에 달린 3번째 댓글에 대한 4번째 답글" ,
+                                              "첫번째 댓글에 대한 4번째 댓글 추가" ,
                                               "userE" ,
                                               null ,
                                               null ,
@@ -348,6 +348,19 @@ class CommentRepositoryTest {
         Comment commentFivthInsertResult = commentRepository.insert(commentFivth);
         System.out.println("첫번째 게시글에 대한 5번쨰 댓글 : " + commentFivthInsertResult.toString());
 
+        // 다섯번쨰 댓글에 대한 답글 추가
+        Comment commentEight = new Comment( 8 ,
+                BOARD_NO ,
+                "다섯번째 댓글에 대한 답글 추가 : NO.8",
+                "userF",
+                null ,
+                null ,
+                COMMENT_NO5 ,
+                commentFivthInsertResult.getCommentIdx() + 1 ,
+                COMMENT_NO5);
+
+        Comment commentEightInsertResult = commentRepository.insert(commentEight);
+        System.out.println("다섯번째 댓글에 대한 답글 추가 : NO.8" + commentEight.toString());
 
         // 첫번째 댓글에 대한 두번째 댓글 추가
         Comment commentSixth = new Comment( COMMENT_NO6 ,
@@ -361,9 +374,24 @@ class CommentRepositoryTest {
                                             commentOneInsertResult.getCommentGroupNo());
 
 
+
         Comment commentSixthInsertResult = commentRepository.insert(commentSixth);
         System.out.println("첫번째 댓글에 대한 두번째 답글 (NO.6) : " + commentSixth.toString());
 
+
+
+        Comment commentSeventh = new Comment( 7 ,
+                BOARD_NO ,
+                "첫번째 댓글에 대한 세번째 답글 (NO.7)" ,
+                "userH",
+                null ,
+                null ,
+                commentOneInsertResult.getCommentParentNo() ,
+                commentOneInsertResult.getCommentIdx() + 1 ,
+                commentOneInsertResult.getCommentGroupNo());
+
+        Comment commentSeventhInsertResult = commentRepository.insert(commentSeventh);
+        System.out.println("첫번째 댓글에 대한 세번째 답글 (NO.7)" + commentSeventhInsertResult.toString());
 
         // when
         // 4. 게시글 번호에 달린 댓글을 가져올떄 대댓글까지 조회해 오는지 테스트
@@ -376,28 +404,6 @@ class CommentRepositoryTest {
 
         // then
         // 5. 계층형 구조로 잘 조회되었는지 결과확인
-        assertThat(resultComments.size()).isEqualTo(6);
-        System.out.println(resultComments.get(0).getCommentNo());
-        System.out.println(commentOneInsertResult.getCommentNo());
-        assertThat(resultComments.get(0).getCommentNo()).isEqualTo(commentOneInsertResult.getCommentNo());
-        assertThat(resultComments.get(0).getCommentBoardNo()).isEqualTo(commentOneInsertResult.getCommentBoardNo());
-
-        assertThat(resultComments.get(1).getCommentNo()).isSameAs(commentTwoInsertResult.getCommentNo());
-        assertThat(resultComments.get(1).getCommentBoardNo()).isEqualTo(commentTwoInsertResult.getCommentBoardNo());
-
-        assertThat(resultComments.get(2).getCommentNo()).isEqualTo(commentThirdResult.getCommentNo());
-        assertThat(resultComments.get(2).getCommentBoardNo()).isEqualTo(commentThirdResult.getCommentBoardNo());
-
-        assertThat(resultComments.get(3).getCommentNo()).isEqualTo(commentFourthInsertResult.getCommentNo());
-        assertThat(resultComments.get(3).getCommentBoardNo()).isEqualTo(commentFourthInsertResult.getCommentBoardNo());
-
-
-        assertThat(resultComments.get(4).getCommentNo()).isEqualTo(commentFivthInsertResult.getCommentNo());
-        assertThat(resultComments.get(4).getCommentBoardNo()).isEqualTo(commentFivthInsertResult.getCommentBoardNo());
-
-        assertThat(resultComments.get(5).getCommentNo()).isEqualTo(commentSixthInsertResult.getCommentNo());
-        assertThat(resultComments.get(5).getCommentBoardNo()).isEqualTo(commentSixthInsertResult.getCommentBoardNo());
-        assertThat(resultComments.get(5).getCommentGroupNo()).isEqualTo(1);
-        assertThat(resultComments.get(5).getCommentParentNo()).isEqualTo(1);
+        assertThat(resultComments.size()).isEqualTo(8);
     }
 }
