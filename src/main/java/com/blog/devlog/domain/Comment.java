@@ -60,6 +60,18 @@ public class Comment {
                 ", commentGroupNo=" + commentGroupNo +
                 '}';
     }
+
+    public void update(Comment commentNineUpdate) {
+        this.commentNo = commentNineUpdate.getCommentNo();
+        this.commentBoardNo = commentNineUpdate.getCommentBoardNo();
+        this.commentContent = commentNineUpdate.getCommentContent();
+        this.userId = commentNineUpdate.getUserId();
+        this.commentCreatedAt = commentNineUpdate.getCommentCreatedAt();
+        this.commentUpdatedAt = commentNineUpdate.getCommentUpdatedAt();
+        this.commentParentNo = commentNineUpdate.getCommentParentNo();
+        this.commentIdx = commentNineUpdate.getCommentIdx();
+        this.commentGroupNo = commentNineUpdate.getCommentGroupNo();
+    }
 }
 
 

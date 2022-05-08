@@ -185,15 +185,58 @@ public class CommentRepository {
             pstmt.setInt(2, comment.getCommentBoardNo());
             pstmt.setString(3, comment.getCommentContent());
             pstmt.setString(4, comment.getUserId());
-            pstmt.setDate(5, date);
+            pstmt.setDate(5, (java.sql.Date) comment.getCommentCreatedAt());
             pstmt.setDate(6, date);
-            pstmt.setInt(7, comment.getCommentIdx());
-            pstmt.setInt(8, comment.getCommentGroupNo());
-            pstmt.setInt(9, comment.getCommentNo());
+            pstmt.setInt(7,comment.getCommentParentNo());
+            pstmt.setInt(8, comment.getCommentIdx());
+            pstmt.setInt(9, comment.getCommentGroupNo());
             pstmt.setInt(10, comment.getCommentNo());
             int count = pstmt.executeUpdate();
             log.info("update ={} ", count);
             return count;
+        } catch (SQLException e) {
+            log.error("db error", e);
+            e.printStackTrace();
+            throw e;
+        } finally {
+            close(con, pstmt, null);
+        }
+    }
+
+
+    // 댓글 수정일 위한 단일 조회
+    public Comment findOneComment(Integer commentNo , Integer boardNo) throws SQLException {
+        String sql = "select * from comments where comment_no = ? and comment_board_no = ?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Comment commentEntity = null;
+
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, commentNo);
+            pstmt.setInt(2, boardNo);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                int commentNoPk = rs.getInt("COMMENT_NO");
+                int commentBoardNo = rs.getInt("comment_board_no");
+                String commentConent = rs.getString("comment_content");
+                String userId = rs.getString("COMMENT_USER_ID");
+                Date commentCreatedAt = rs.getDate("comment_created_at");
+                Date commentUpdatedAt = rs.getDate("comment_updated_at");
+                int commentParentNo = rs.getInt("COMMENT_PARENT_NO");
+                int commentIdx = rs.getInt("comment_idx");
+                int commentGroupNo = rs.getInt("comment_group_no");
+
+                commentEntity = new Comment(commentNoPk, commentBoardNo, commentConent, userId, commentCreatedAt, commentUpdatedAt, commentParentNo ,commentIdx, commentGroupNo);
+            } else {
+                throw new NoSuchElementException("there are no comment");
+            }
+
+            return commentEntity;
         } catch (SQLException e) {
             log.error("db error", e);
             e.printStackTrace();
