@@ -261,7 +261,7 @@ class CommentRepositoryTest {
 
 
     @Test
-    @DisplayName("계층형 댓글 - 댓글에 대한 답글 추가 테스트")
+    @DisplayName("계층형 댓글 - 댓글에 대한 답글 추가 및 조회 테스트")
     void insertReplyComment() throws SQLException {
 
 
@@ -419,6 +419,27 @@ class CommentRepositoryTest {
         for (Comment commentStr : comments) {
             System.out.println(commentStr.toString());
         }
+
+        assertThat(comments.size()).isEqualTo(10);
+
+        assertThat(commentOneInsertResult.getCommentIdx()).isEqualTo(0);
+        assertThat(commentTwoInsertResult.getCommentIdx()).isEqualTo(0);
+        assertThat(commentThreeInsertResult.getCommentIdx()).isEqualTo(0);
+
+        assertThat(commentReplyOneResult.getCommentIdx()).isEqualTo(1);
+        assertThat(commentReplyTwoResult.getCommentIdx()).isEqualTo(1);
+
+        assertThat(commentReplyTwo_1Result.getCommentIdx()).isEqualTo(2);
+
+        assertThat(commentSeventhResult.getCommentIdx()).isEqualTo(0);
+        assertThat(commentEightInsertResult.getCommentIdx()).isEqualTo(0);
+
+        assertThat(commentNineInsertResult.getCommentIdx()).isEqualTo(3);
+
+        assertThat(replyCommentSeventhResult.getCommentIdx()).isEqualTo(1);
+
+
+
 
     }
 }
