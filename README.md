@@ -27,6 +27,8 @@
 + 계층형으로 댓글 조회 테스트 코드 작성
 + 계층형 댓글 수정 테스트 코드 작성
 + 계층형 댓글 삭제 테스트 코드 작성
++ 계층형 댓글 CRUD 비즈니스 로직 기능 설계
++ 계층형 댓글 CRUD 비즈니스 로직 테스트 코드 작성 및 테스트 진행
 
 
 ### 계층형 댓글 테이블 설계 
@@ -114,6 +116,10 @@ java.lang.AssertionError: Expecting code to raise a throwable.
 + ORA-02292: integrity constraint (ADMIN.COMMENT_BOARD_NO_FK) violated - child record found
 + FK인 댓글을 먼저 삭제한후 게시글을 삭제해 줌으로써 에러를 해결했다
 
+7. update 쿼리시 where 전에 ,(콤마)가 붙어 있어 에러가 발생했다
++ 오라클 쿼리 오류(ORA-01747: invalid user.table.column, table.column, or column specification)
++ where 구문 시작전에 붙은 ,(콤마)를 삭제해 줬다
+
 ### SQL 관련 발생했던 예외
 ####오라클 sql ORA-00904 : 부적합한 식별자 invalid identifier
 + insert와 select 쿼리를 날릴때 발생했다
@@ -133,6 +139,9 @@ java.lang.AssertionError: Expecting code to raise a throwable.
 #### ORA-02292: integrity constraint (ADMIN.COMMENT_BOARD_NO_FK) violated - child record found
 + 댓글 테이블이 게시글 번호를 FK로 갖고 있는데 댓글을 삭제하지 않고 게시글을 먼저 삭제하려고 했기 때문에 FK가 있어 삭제할수 없다는 에러가 발생했다
 + FK에 해당하는 테이블을 row를 먼저 삭제하고 FK를 참조하는 부모 테이블의 row를 삭제해 줬다
+
+#### 오라클 쿼리 오류(ORA-01747: invalid user.table.column, table.column, or column specification)
++ 테이블의 컬럼명 또는 컬럼명의 이름에 이상이 있을경우 발생하는 에러
 
 ### SQL 테이블에 컬럼추가하는 방법
 + alter table 테이블명 add (컬럼명 타입 null 여부);
