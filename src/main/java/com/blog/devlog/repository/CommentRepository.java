@@ -56,6 +56,7 @@ public class CommentRepository {
             pstmt.setInt(9, comment.getCommentGroupNo());
             int count = pstmt.executeUpdate();
             log.info("insert ={} ", count);
+            log.info("comment = {}" , comment.toString());
             return comment;
         } catch (SQLException e) {
             log.error("db error", e);
@@ -245,6 +246,36 @@ public class CommentRepository {
             close(con, pstmt, null);
         }
     }
+
+    // 계층형 댓글 삭제시 - 하위 계층이 영향을 받을 수 있으므로 update로 댓글이 보이지 않게 처리
+    public Integer updateDeleteCommentStatus(Integer commentNo) throws SQLException {
+
+        String sql = "update comments set COMMENT_CONTENT = ?," +
+                "                     comment_updated_at = SYSDATE" +
+                "                where comment_no = ?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+
+            pstmt.setString(1, "삭제된 댓글입니다");
+            pstmt.setInt(2, commentNo);
+            int count = pstmt.executeUpdate();
+            log.info("update ={} ", count);
+            return count;
+        } catch (SQLException e) {
+            log.error("db error", e);
+            e.printStackTrace();
+            throw e;
+        } finally {
+            close(con, pstmt, null);
+        }
+    }
+
+
 
 
     // 댓글 삭제

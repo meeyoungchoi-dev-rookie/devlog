@@ -152,11 +152,116 @@ class CommentServiceTest {
                 "userC");
 
         Comment commentThreeInsertResult = commentService.createComment(commentThree);
-        System.out.println("두번째 댓글 등록 결과: " + commentTwoInsertResult.toString());
+        System.out.println("세번째 댓글 등록 결과: " + commentTwoInsertResult.toString());
+
+
+        // 2번 댓글에 대한 답글 등록
+        CommentRequest replyCommentTwo_4 = new CommentRequest( COMMENT_NO4 ,
+                                                               article.getBoardNo() ,
+                                                               null ,
+                                                                null ,
+                                                               commentTwoInsertResult.getCommentGroupNo() ,
+                                                                commentTwoInsertResult.getCommentIdx() ,
+                                                                "#2_1 2번 댓글에 대한 답글" ,
+                                                                commentTwoInsertResult.getCommentParentNo() ,
+                                                                "userD");
+
+        Comment commentFourInsertResult = commentService.createComment(replyCommentTwo_4);
+        System.out.println("4번째 #2_1 2번 댓글에 대한 답글: " + commentFourInsertResult.toString());
+
+        // 1번 댓글에 대한 답글
+        CommentRequest replyCommentOne_5 = new CommentRequest( COMMENT_NO5 ,
+                                                                article.getBoardNo() ,
+                                                                null ,
+                                                                null ,
+                                                                commentOneInsertResult.getCommentGroupNo() ,
+                                                                commentOneInsertResult.getCommentIdx() ,
+                                                                "#1_1 1번 댓글에 대한 답글" ,
+                                                                commentOneInsertResult.getCommentParentNo() ,
+                                                                "userE");
+
+        Comment commentFivthInsertResult = commentService.createComment(replyCommentOne_5);
+        System.out.println("5번째 #1_1 1번 댓글에 대한 답글: " + commentFivthInsertResult.toString());
+
+
+        // #2_1번 댓글에 대한 답글
+        CommentRequest replyCommnetTwo_2 = new CommentRequest( COMMENT_NO6 ,
+                                                                article.getBoardNo() ,
+                                                                null ,
+                                                                null ,
+                                                                commentTwoInsertResult.getCommentGroupNo() ,
+                                                                commentTwoInsertResult.getCommentIdx() ,
+                                                                "#2_2 : #2_1번 댓글에 대한 답글" ,
+                                                                commentTwoInsertResult.getCommentParentNo() ,
+                                                                "userF");
+
+
+        Comment commentReplyTwo_2Result = commentService.createComment(replyCommnetTwo_2);
+        System.out.println("6번째 #2_2 : #2_1번 댓글에 대한 답글 : " + commentReplyTwo_2Result.toString());
+
+
+        // #7번 댓글
+        CommentRequest commentSeventh = new CommentRequest( COMMENT_NO7 ,
+                                                            BOARD_NO ,
+                                                            null ,
+                                                            null ,
+                                                            COMMENT_NO7 ,
+                                                            0 ,
+                                                            "#7 : 7번째 댓글" ,
+                                                            COMMENT_NO7 ,
+                                                            "userG");
+         Comment commentSeventthInsertResult = commentService.createComment(commentSeventh);
+        System.out.println("7번째 #7 댓글: " + commentSeventthInsertResult.toString());
+
+
+        // #8번 댓글
+        CommentRequest commentEight = new CommentRequest( COMMENT_NO8 ,
+                                                          BOARD_NO ,
+                                                          null ,
+                                                          null ,
+                                                          COMMENT_NO8 ,
+                                                          0 ,
+                                                          "#8 : 8번째 댓글" ,
+                                                            COMMENT_NO8 ,
+                                                            "userH");
+
+        Comment commentEightInsertResult = commentService.createComment(commentEight);
+        System.out.println("8번째 #8 댓글: " + commentEightInsertResult.toString());
+
+
+
+
+        // #9번 댓글 => #2_3 : #2_2(6번댓글)에 대한 답글
+        CommentRequest commentReplyNine = new CommentRequest( COMMENT_NO9 ,
+                                                              BOARD_NO ,
+                                                              null ,
+                                                              null ,
+                                                              commentReplyTwo_2Result.getCommentGroupNo() ,
+                                                              commentReplyTwo_2Result.getCommentIdx() ,
+                                                              "#10 : #2_3 (#2_2 6번 댓글에 대한 답글)" ,
+                                                                commentReplyTwo_2Result.getCommentParentNo() ,
+                                                              "userI"
+        );
+
+        commentService.createComment(commentReplyNine);
+
+        // #10번 댓글 -> #7 (7번 댓글)에 대한 답글
+        CommentRequest replyCommentSeventh_1 = new CommentRequest(  COMMENT_NO10 ,
+                                                                    BOARD_NO ,
+                                                                    null ,
+                                                                    null ,
+                                                                    commentSeventthInsertResult.getCommentGroupNo() ,
+                                                                    commentSeventthInsertResult.getCommentIdx() ,
+                                                                    "#10 : #7-1 (#7 7번 댓글에 대한 답글" ,
+                                                                    commentSeventthInsertResult.getCommentParentNo() ,
+                                                                    "userJ"
+        );
+
+        commentService.createComment(replyCommentSeventh_1);
 
         List<Comment> comments = commentService.getCommentList(article.getBoardNo());
 
-        assertThat(comments.size()).isEqualTo(3);
+        assertThat(comments.size()).isEqualTo(10);
     }
     
     @Test
@@ -217,29 +322,132 @@ class CommentServiceTest {
         Comment commentThreeInsertResult = commentService.createComment(commentThree);
         System.out.println("두번째 댓글 등록 결과: " + commentTwoInsertResult.toString());
 
+        // 2번 댓글에 대한 답글 등록
+        CommentRequest replyCommentTwo_4 = new CommentRequest( COMMENT_NO4 ,
+                article.getBoardNo() ,
+                null ,
+                null ,
+                commentTwoInsertResult.getCommentGroupNo() ,
+                commentTwoInsertResult.getCommentIdx()  + 1,
+                "#2_1 2번 댓글에 대한 답글" ,
+                commentTwoInsertResult.getCommentParentNo() ,
+                "userD");
 
-        // 2번 댓글 수정
-        Comment findCommentTwoResult = commentService.findOneComment(commentTwoInsertResult.getCommentNo() , commentTwoInsertResult.getCommentBoardNo());
-        System.out.println("findCommentTwoResult : " + findCommentTwoResult.toString());
+        Comment commentFourInsertResult = commentService.createComment(replyCommentTwo_4);
+        System.out.println("4번째 #2_1 2번 댓글에 대한 답글: " + commentFourInsertResult.toString());
+
+        // 1번 댓글에 대한 답글
+        CommentRequest replyCommentOne_5 = new CommentRequest( COMMENT_NO5 ,
+                article.getBoardNo() ,
+                null ,
+                null ,
+                commentOneInsertResult.getCommentGroupNo() ,
+                commentOneInsertResult.getCommentIdx() ,
+                "#1_1 1번 댓글에 대한 답글" ,
+                commentOneInsertResult.getCommentParentNo() ,
+                "userE");
+
+        Comment commentFivthInsertResult = commentService.createComment(replyCommentOne_5);
+        System.out.println("5번째 #1_1 1번 댓글에 대한 답글: " + commentFivthInsertResult.toString());
 
 
-        CommentRequest updateComment = new CommentRequest( findCommentTwoResult.getCommentNo() ,
-                findCommentTwoResult.getCommentBoardNo() ,
-                findCommentTwoResult.getCommentCreatedAt() ,
-                findCommentTwoResult.getCommentCreatedAt() ,
-                findCommentTwoResult.getCommentGroupNo() ,
-                findCommentTwoResult.getCommentIdx() ,
-                "#2번 댓글 내용 수정이당" ,
-                findCommentTwoResult.getCommentParentNo() ,
-                findCommentTwoResult.getUserId());
+        // #2_1번 댓글에 대한 답글
+        CommentRequest replyCommnetTwo_2 = new CommentRequest( COMMENT_NO6 ,
+                article.getBoardNo() ,
+                null ,
+                null ,
+                commentFourInsertResult.getCommentGroupNo() ,
+                commentFourInsertResult.getCommentIdx() + 1,
+                "#2_2 : #2_1번 댓글에 대한 답글" ,
+                commentFourInsertResult.getCommentParentNo() ,
+                "userF");
+
+
+        Comment commentReplyTwo_2Result = commentService.createComment(replyCommnetTwo_2);
+        System.out.println("6번째 #2_2 : #2_1번 댓글에 대한 답글 : " + commentReplyTwo_2Result.toString());
+
+
+        // #7번 댓글
+        CommentRequest commentSeventh = new CommentRequest( COMMENT_NO7 ,
+                BOARD_NO ,
+                null ,
+                null ,
+                COMMENT_NO7 ,
+                0 ,
+                "#7 : 7번째 댓글" ,
+                COMMENT_NO7 ,
+                "userG");
+        Comment commentSeventthInsertResult = commentService.createComment(commentSeventh);
+        System.out.println("7번째 #7 댓글: " + commentSeventthInsertResult.toString());
+
+
+        // #8번 댓글
+        CommentRequest commentEight = new CommentRequest( COMMENT_NO8 ,
+                BOARD_NO ,
+                null ,
+                null ,
+                COMMENT_NO8 ,
+                0 ,
+                "#8 : 8번째 댓글" ,
+                COMMENT_NO8 ,
+                "userH");
+
+        Comment commentEightInsertResult = commentService.createComment(commentEight);
+        System.out.println("8번째 #8 댓글: " + commentEightInsertResult.toString());
+
+
+
+
+        // #9번 댓글 => #2_3 : #2_2(6번댓글)에 대한 답글
+        CommentRequest commentReplyNine = new CommentRequest( COMMENT_NO9 ,
+                BOARD_NO ,
+                null ,
+                null ,
+                commentReplyTwo_2Result.getCommentGroupNo() ,
+                commentReplyTwo_2Result.getCommentIdx() + 1 ,
+                "#10 : #2_3 (#2_2 6번 댓글에 대한 답글)" ,
+                commentReplyTwo_2Result.getCommentParentNo() ,
+                "userI"
+        );
+
+        commentService.createComment(commentReplyNine);
+
+        // #10번 댓글 -> #7 (7번 댓글)에 대한 답글
+        CommentRequest replyCommentSeventh_1 = new CommentRequest(  COMMENT_NO10 ,
+                BOARD_NO ,
+                null ,
+                null ,
+                commentSeventthInsertResult.getCommentGroupNo() ,
+                commentSeventthInsertResult.getCommentIdx() ,
+                "#10 : #7-1 (#7 7번 댓글에 대한 답글" ,
+                commentSeventthInsertResult.getCommentParentNo() ,
+                "userJ"
+        );
+
+        commentService.createComment(replyCommentSeventh_1);
+
+        // #2_2 6번글 수정
+        Comment findCommentTwoResult_2 = commentService.findOneComment(replyCommnetTwo_2.getCommentNo() , replyCommnetTwo_2.getCommentBoardNo());
+        System.out.println("findCommentTwoResult_2 : " + findCommentTwoResult_2.toString());
+
+
+        CommentRequest updateComment = new CommentRequest( findCommentTwoResult_2.getCommentNo() ,
+                findCommentTwoResult_2.getCommentBoardNo() ,
+                findCommentTwoResult_2.getCommentCreatedAt() ,
+                findCommentTwoResult_2.getCommentCreatedAt() ,
+                findCommentTwoResult_2.getCommentGroupNo() ,
+                findCommentTwoResult_2.getCommentIdx() ,
+                "#2_2 6번 댓글 내용 수정이당" ,
+                findCommentTwoResult_2.getCommentParentNo() ,
+                findCommentTwoResult_2.getUserId());
 
         Integer updateCountResult = commentService.updateComment(updateComment);
         assertThat(updateCountResult).isEqualTo(1);
 
-        assertThat(updateComment.getCommentNo()).isEqualTo(findCommentTwoResult.getCommentNo());
-        assertThat(updateComment.getCommentIdx()).isEqualTo(findCommentTwoResult.getCommentIdx());
-        assertThat(updateComment.getCommentGroupNo()).isEqualTo(findCommentTwoResult.getCommentGroupNo());
-        assertThat(updateComment.getCommentParentNo()).isEqualTo(findCommentTwoResult.getCommentParentNo());
+        assertThat(updateComment.getCommentNo()).isEqualTo(findCommentTwoResult_2.getCommentNo());
+        assertThat(updateComment.getCommentIdx()).isEqualTo(findCommentTwoResult_2.getCommentIdx());
+        assertThat(updateComment.getCommentGroupNo()).isEqualTo(findCommentTwoResult_2.getCommentGroupNo());
+        assertThat(updateComment.getCommentParentNo()).isEqualTo(findCommentTwoResult_2.getCommentParentNo());
     }
 
 
