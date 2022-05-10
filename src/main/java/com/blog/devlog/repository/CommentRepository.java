@@ -205,7 +205,7 @@ public class CommentRepository {
     }
 
 
-    // 댓글 수정일 위한 단일 조회
+    // 댓글 수정을 위한 단일 조회
     public Comment findOneComment(Integer commentNo , Integer boardNo) throws SQLException {
         String sql = "select * from comments where comment_no = ? and comment_board_no = ?";
 
