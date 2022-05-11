@@ -2,6 +2,7 @@ package com.blog.devlog.controller;
 
 import com.blog.devlog.dto.request.CommentRequest;
 import com.blog.devlog.service.CommentService;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.nio.charset.StandardCharsets;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -46,11 +48,10 @@ class CommentControllerTest {
     }
 
 
-
     @Test
     public void getCommentControllerTest() throws Exception {
 
-        CommentRequest commentRequest = new CommentRequest(5, 1,  null , null , 5 , 0 , "#5 다섯번째 댓글" , 5, "userD");
+        CommentRequest commentRequest = new CommentRequest(8, 1,  null , null , 8 , 0 , "#8 다섯번째 댓글" , 8, "userD");
 
         commentService.createComment(commentRequest);
 
@@ -60,11 +61,9 @@ class CommentControllerTest {
         )
 
         .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(commentRequest.toString()));
+                .andExpect(status().isOk());
+
+        assertThat(commentRequest.getCommentNo()).isEqualTo(8);
+        assertThat(commentRequest.getCommentBoardNo()).isEqualTo(1);
     }
-
-
-
-
 }
