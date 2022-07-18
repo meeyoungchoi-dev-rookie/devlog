@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.NoSuchElementException;
 
 import static com.blog.devlog.connection.ConnectionConst.*;
 import static org.assertj.core.api.Assertions.*;
+
 
 class ArticleServiceTest {
 
@@ -47,14 +49,9 @@ class ArticleServiceTest {
         articleService = new ArticleService(transactionManager, articleRepository);
     }
 
-    @AfterEach
-    void after() throws SQLException {
-        articleRepository.delete(BOARD_NO);
-    }
-
-
     @Test
     @DisplayName("게시글 등록 서비스 테스트")
+    @Transactional
     void createTest() throws SQLException {
         Article article = new Article(BOARD_NO, "title", "content", "userA");
 
@@ -73,10 +70,12 @@ class ArticleServiceTest {
         Article article = new Article(BOARD_NO, "title", "content", "userA");
 
         Article entity = articleService.insert(article);
+        System.out.println("entity= " + entity.toString());
 
         assertThat(article.getBoardNo()).isEqualTo(entity.getBoardNo());
 
         Article finded = articleRepository.findById(entity.getBoardNo());
+        System.out.println("finded = " + finded.toString());
         assertThat(entity).isEqualTo(finded);
         assertThat(entity.getBoardNo()).isEqualTo(finded.getBoardNo());
     }
@@ -98,6 +97,7 @@ class ArticleServiceTest {
     
     @Test
     @DisplayName("게시글 삭제 서비스 테스트")
+    @Transactional
     void deleteTest() throws SQLException {
         Article article = new Article(BOARD_NO, "title", "content", "userB");
         Article entity = articleService.insert(article);

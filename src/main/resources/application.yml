@@ -10,8 +10,8 @@ spring:
     cache: false
   datasource:
     url: jdbc:oracle:thin:@127.0.0.1:1521:XE
-    username:
-    password:
+    username: admin
+    password: 1234
     driver-class-name: oracle.jdbc.driver.OracleDriver
 mybatis:
   mapper-locations: mybatis-mapper/**/*.xml

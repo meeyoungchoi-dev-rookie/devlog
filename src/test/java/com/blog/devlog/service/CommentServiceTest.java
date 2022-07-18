@@ -10,6 +10,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -54,14 +55,9 @@ class CommentServiceTest {
         commentService = new CommentService(transactionManager , commentRepository);
     }
 
-    @AfterEach
-    void after() throws SQLException {
-        commentRepository.deleteCommentsRelatedWithArticle(BOARD_NO);
-        articleRepository.delete(BOARD_NO);
-    }
-
     @Test
     @DisplayName("댓글 등록 서비스 테스트")
+    @Transactional
     void createComment() throws SQLException {
 
         Article article = new Article( BOARD_NO ,
@@ -231,6 +227,7 @@ class CommentServiceTest {
 
     @Test
     @DisplayName("댓글 목록 조회 서비스 테스트")
+    @Transactional
     void getCommentList() throws SQLException {
 
 
@@ -588,6 +585,7 @@ class CommentServiceTest {
 
     @Test
     @DisplayName("댓글 삭제 서비스 테스트 - 계층구조 고려하여 [삭제된 댓글입니다] 로 표시되도록 update")
+    @Transactional
     void deleteStatusUpdate() throws SQLException {
         // given
         // 1. 게시글 추가

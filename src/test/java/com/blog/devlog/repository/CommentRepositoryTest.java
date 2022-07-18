@@ -4,6 +4,7 @@ import com.blog.devlog.domain.Article;
 import com.blog.devlog.domain.Comment;
 import com.zaxxer.hikari.HikariDataSource;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 
 import java.sql.SQLException;
@@ -12,8 +13,10 @@ import java.util.NoSuchElementException;
 
 import static com.blog.devlog.connection.ConnectionConst.*;
 import static org.assertj.core.api.Assertions.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 class CommentRepositoryTest {
 
     public static final Integer BOARD_NO = 1;
@@ -76,10 +79,20 @@ class CommentRepositoryTest {
 
         // when
         Comment commentResult = commentRepository.findOne(article.getBoardNo());
+        System.out.println("조회후 결과: " + commentResult.toString());
 
         // then
         assertThat(commentResult.getCommentNo()).isEqualTo(comment.getCommentNo());
         assertThat(commentResult.getCommentBoardNo()).isEqualTo(comment.getCommentBoardNo());
+
+
+        // 댓글번호 댓글내용 부모글번호 그룹번호  깊이
+        //                                  0
+        //                                  1
+        //                                   2
+        //                                   3
+
+
     }
 
 
